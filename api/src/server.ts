@@ -1,16 +1,46 @@
-const express = require("express");
-const http = require("http");
-const socketio = require("socket.io");
+import express, { Express } from "express";
+import { createServer } from "http";
+import { AddressInfo } from "net";
+import { Server } from "socket.io";
+import {
+  ClientToServerEvents,
+  InterServerEvents,
+  ServerToClientEvents,
+  SocketData,
+} from "./types/websocket";
 
-const app = express();
+const app: Express = express();
 
-const server = http.createServer(app);
-const io = socketio(server).sockets;
+// initialize a simple http server
+const server = createServer(app);
 
-//* Websocket *//
-io.on("connection", function (socket: any) {
-  socket.on("join-room");
+// initialize the WebSocket server instance
+const io = new Server<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData
+>(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
 });
 
-const port = process.env.PORT || 5000;
-server.listen(port, () => console.log(`Server started on port ${port}`));
+io.on("connection", (socket) => {
+  console.log(socket.id);
+  socket.on("message", (data) => {
+    console.log(data);
+  });
+  io.emit("mess", "You joined!");
+  socket.on("disconnect", (reason) => {
+    console.log("User disconnect: ", socket.id);
+  });
+});
+
+// start our server
+server.listen(process.env.PORT || 8999, () => {
+  console.log(
+    `Server started on port ${(server.address() as AddressInfo).port} :)`
+  );
+});
