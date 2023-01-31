@@ -14,15 +14,15 @@ const initialState: ConnectionState = { users: [], room: undefined };
 
 const socket = io(`${SIGNALING_BASEURL}/np`, { forceNew: true });
 
-socket.on("connect", () => {
-  console.log("connect succesfully, socket id: ", socket.id);
-});
+// socket.on("connect", () => {
+//   console.log("connect succesfully, socket id: ", socket.id);
+// });
 
-const testSend = (txt: string) => {
-  socket.emit("join", "hi", (data: any) => {
-    console.log(data);
-  });
-};
+// const testSend = (txt: string) => {
+//   socket.emit("join", "hi", (data: any) => {
+//     console.log(data);
+//   });
+// };
 
 export const connectionSlice = createSlice({
   name: "connection",

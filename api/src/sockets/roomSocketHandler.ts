@@ -39,4 +39,10 @@ export const roomSocketHandler = (
     }
   );
   socket.on("requestJoinRoom", (user: UserModel, room: RequestJoinRoom) => {});
+  socket.on("hello", (s: string) => {
+    console.log(s);
+  });
+  socket.on("disconnect", () => {
+    console.log(socket.id, " disconnected");
+  });
 };

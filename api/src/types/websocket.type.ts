@@ -9,7 +9,7 @@ export interface ServerToClientEvents {
 }
 
 export interface ClientToServerEvents {
-  hello: () => void;
+  hello: (s:string) => void;
   message: (data: string) => void;
   join: (roomId: string, callback: Function) => void;
   createRoom: (user: UserModel, room: CreateRoom, callback: Function) => void;
