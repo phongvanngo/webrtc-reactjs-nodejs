@@ -2,12 +2,13 @@ import express, { Express } from "express";
 import { createServer } from "http";
 import { AddressInfo } from "net";
 import { Server } from "socket.io";
+import { roomSocketHandler } from "./sockets/roomSocketHandler";
 import {
   ClientToServerEvents,
   InterServerEvents,
   ServerToClientEvents,
   SocketData,
-} from "./types/websocket";
+} from "./types/websocket.type";
 
 const app: Express = express();
 
@@ -27,15 +28,9 @@ const io = new Server<
   },
 });
 
-io.on("connection", (socket) => {
+io.of("/np").on("connection", (socket) => {
+  roomSocketHandler(io, socket);
   console.log(socket.id);
-  socket.on("message", (data) => {
-    console.log(data);
-  });
-  io.emit("mess", "You joined!");
-  socket.on("disconnect", (reason) => {
-    console.log("User disconnect: ", socket.id);
-  });
 });
 
 // start our server
