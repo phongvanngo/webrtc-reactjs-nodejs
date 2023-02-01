@@ -6,16 +6,19 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import SocketContextComponent from "./app/context/SocketContextComponent";
+import { BrowserRouter } from "react-router-dom";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
 root.render(
-    <Provider store={store}>
-      <SocketContextComponent>
+  <Provider store={store}>
+    <SocketContextComponent>
+      <BrowserRouter>
         <App />
-      </SocketContextComponent>
-    </Provider>
+      </BrowserRouter>
+    </SocketContextComponent>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

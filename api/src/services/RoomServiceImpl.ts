@@ -1,4 +1,5 @@
 import { CreateRoomRequestDTO } from "../dto/request/CreateRoomRequestDTO";
+import { JoinRoomRequestDTO } from "../dto/request/JoinRoomRequestDTO";
 import { RoomModel } from "../model/RoomModel";
 import { UserModel } from "../model/UserModel";
 
@@ -18,6 +19,15 @@ export class RoomService {
       members: [],
       roomId: roomId,
     };
+    this.rooms.push(newRoom);
     return newRoom;
+  }
+  static requestJoinRoom({
+    user,
+    room: { roomId },
+  }: JoinRoomRequestDTO): RoomModel | null {
+    const room = this.rooms.find((r) => r.roomId === roomId);
+    if (room) return room;
+    return null;
   }
 }

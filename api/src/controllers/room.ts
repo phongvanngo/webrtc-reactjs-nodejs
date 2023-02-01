@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CreateRoomRequestDTO } from "../dto/request/CreateRoomRequestDTO";
-import { RoomModel } from "../model/RoomModel";
+import { JoinRoomRequestDTO } from "../dto/request/JoinRoomRequestDTO";
+import { RequestJoinRoom, RoomModel } from "../model/RoomModel";
 import { RoomService } from "../services/RoomServiceImpl";
 
 export async function createRoomHandler(
@@ -10,7 +11,20 @@ export async function createRoomHandler(
   try {
     const room = RoomService.createRoom(req.body);
     res.send(room);
-  } catch (error:any) {
+  } catch (error: any) {
+    return res.status(500).send(req.toString());
+  }
+}
+
+export async function requestJoinRoom(
+  req: Request<{}, {}, JoinRoomRequestDTO>,
+  res: Response<RoomModel | string | any>
+) {
+  try {
+    const room = RoomService.requestJoinRoom(req.body);
+    if (!room) return res.status(404).send("Room Not Found");
+    res.send(room);
+  } catch (error: any) {
     return res.status(500).send(req.toString());
   }
 }

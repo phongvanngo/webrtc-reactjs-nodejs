@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { DemoSocketContext } from "./components/DemoSocketContext";
 import CreateRoomScreen from "./components/Meeting/CreateRoomScreen";
+import AppRoutes from "./routes";
 
 function App() {
   useEffect(() => {
@@ -9,8 +10,8 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <CreateRoomScreen />
+    <div>
+      <AppRoutes />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import cors from "cors";
 import express, { Express } from "express";
 import { createServer } from "http";
 import { AddressInfo } from "net";
@@ -12,6 +13,12 @@ import {
 } from "./types/websocket.type";
 
 const app: Express = express();
+
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.use(express.json());
 

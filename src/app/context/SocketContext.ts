@@ -25,7 +25,6 @@ export type CreateRoomPayloadType = {
 export type TSocketContextActions =
   | "update_socket"
   | "hello"
-  | "createRoom"
   | "joinRoom";
 export type TSocketContextPayload =
   | Socket
@@ -49,11 +48,6 @@ export const SocketReducer = (
   );
 
   switch (action.type) {
-    case "createRoom":
-      const { user, room } = action.payload as CreateRoomPayloadType;
-      state.socket?.emit("createRoom", user, room, (res: any) => {
-        const room = res.room as Room;
-      });
     case "update_socket":
       return { ...state, socket: action.payload as Socket };
     case "hello":
@@ -73,7 +67,7 @@ export interface ISocketContextProps {
 const SocketContext = createContext<ISocketContextProps>({
   SocketState: initialContextState,
   SocketDispatch: () => {},
-});
+}); 
 
 export const SocketContextConsumer = SocketContext.Consumer;
 export const SocketContextProvider = SocketContext.Provider;
