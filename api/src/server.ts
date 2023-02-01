@@ -2,6 +2,7 @@ import express, { Express } from "express";
 import { createServer } from "http";
 import { AddressInfo } from "net";
 import { Server } from "socket.io";
+import { roomRouter } from "./routers/room";
 import { roomSocketHandler } from "./sockets/roomSocketHandler";
 import {
   ClientToServerEvents,
@@ -11,6 +12,10 @@ import {
 } from "./types/websocket.type";
 
 const app: Express = express();
+
+app.use(express.json());
+
+app.use("/room", roomRouter);
 
 // initialize a simple http server
 const server = createServer(app);

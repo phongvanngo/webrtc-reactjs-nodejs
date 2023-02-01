@@ -1,17 +1,38 @@
 import { Socket } from "socket.io-client";
 import { createContext } from "react";
-import { ClientToServerEvents, ServerToClientEvents } from "../../types/socket.type";
+import {
+  ClientToServerEvents,
+  ServerToClientEvents,
+} from "../../types/socket.type";
+import { User } from "../../models/User";
+import { CreateRoomType, Room } from "../../models/Room";
 
 export interface ISocketContextState {
-  socket:Socket<ServerToClientEvents, ClientToServerEvents> | undefined;
+  socket: Socket<ServerToClientEvents, ClientToServerEvents> | undefined;
+  roomId:string | null
 }
 
 export const initialContextState: ISocketContextState = {
   socket: undefined,
+  roomId:null
 };
 
-export type TSocketContextActions = "update_socket" | "hello";
-export type TSocketContextPayload = Socket | string | null;
+export type CreateRoomPayloadType = {
+  user: User;
+  room: CreateRoomType;
+};
+
+export type TSocketContextActions =
+  | "update_socket"
+  | "hello"
+  | "createRoom"
+  | "joinRoom";
+export type TSocketContextPayload =
+  | Socket
+  | string
+  | null
+  | User
+  | CreateRoomPayloadType;
 
 export interface ISocketContextActions {
   type: TSocketContextActions;
@@ -28,12 +49,16 @@ export const SocketReducer = (
   );
 
   switch (action.type) {
+    case "createRoom":
+      const { user, room } = action.payload as CreateRoomPayloadType;
+      state.socket?.emit("createRoom", user, room, (res: any) => {
+        const room = res.room as Room;
+      });
     case "update_socket":
       return { ...state, socket: action.payload as Socket };
     case "hello":
-      const socket = state.socket;
       console.log(state);
-      socket?.emit("hello",`hi my socket id: ${socket.id}`);
+      state.socket?.emit("hello", `hi my socket id: ${state.socket.id}`);
       return { ...state };
     default:
       return state;

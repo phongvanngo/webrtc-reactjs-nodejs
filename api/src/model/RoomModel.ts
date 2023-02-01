@@ -7,8 +7,6 @@ export interface RoomModel {
   members: MemberModel[];
 }
 
-export type CreateRoom = Pick<RoomModel, "roomName" | "description">;
-
 export type RequestJoinRoom = {
   roomId: string;
 };

@@ -1,4 +1,5 @@
-import { CreateRoom, RequestJoinRoom, RoomModel } from "../model/RoomModel";
+import { MemberModel } from "../model/MemberModel";
+import { RequestJoinRoom, RoomModel } from "../model/RoomModel";
 import { UserModel } from "../model/UserModel";
 
 export interface ServerToClientEvents {
@@ -6,13 +7,13 @@ export interface ServerToClientEvents {
   basicEmit: (a: number, b: string, c: Buffer) => void;
   withAck: (d: string, callback: (e: number) => void) => void;
   mess: (d: string) => void;
+  newMemberJoinRoom: (member: MemberModel) => void;
+  joinRoom: (room: RoomModel) => void;
 }
 
 export interface ClientToServerEvents {
-  hello: (s:string) => void;
+  hello: (s: string) => void;
   message: (data: string) => void;
-  join: (roomId: string, callback: Function) => void;
-  createRoom: (user: UserModel, room: CreateRoom, callback: Function) => void;
   requestJoinRoom: (user: UserModel, room: RequestJoinRoom) => void;
 }
 
