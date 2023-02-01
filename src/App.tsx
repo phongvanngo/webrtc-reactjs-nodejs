@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import {
   DemoSocketContext
 } from "./components/DemoSocketContext";
 
 function App() {
-  const [first, setFirst] = useState(null);
+  useEffect(() => {
+    console.log("hifsef");
+  }, [])
+  
   return (
     <div className="App">
       <DemoSocketContext />

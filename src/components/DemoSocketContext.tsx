@@ -5,15 +5,10 @@ import SocketContextComponent from "../app/context/SocketContextComponent";
 type Props = {};
 
 export function DemoSocketContext({}: Props) {
-  return (
-    <SocketContextComponent>
-      <ChatComponent />
-    </SocketContextComponent>
-  );
+  return <ChatComponent />;
 }
 
 export default function ChatComponent() {
-  const state = useContext(SocketContext).SocketState;
   const SocketDispatch = useContext(SocketContext).SocketDispatch;
   return (
     <div>
@@ -21,7 +16,9 @@ export default function ChatComponent() {
         onClick={() => {
           SocketDispatch({ type: "hello", payload: null });
         }}
-      >hi</button>
+      >
+        hi
+      </button>
     </div>
   );
 }

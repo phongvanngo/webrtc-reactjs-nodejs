@@ -26,7 +26,13 @@ const SocketContextComponent: FunctionComponent<ISocketContextProviderProps> = (
 ) => {
   const { current: socket } = useRef<
     Socket<ServerToClientEvents, ClientToServerEvents>
-  >(io(SIGNALING_BASEURL));
+  >(
+    io("http://localhost:8999/np", {
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      autoConnect: false,
+    })
+  );
 
   const [SocketState, SocketDispatch] = useReducer(
     SocketReducer,
@@ -36,8 +42,8 @@ const SocketContextComponent: FunctionComponent<ISocketContextProviderProps> = (
   useEffect(() => {
     console.log("run");
     socket.connect();
-    startListening();
     SocketDispatch({ type: "update_socket", payload: socket });
+    startListening();
 
     return () => {
       console.log("stop");
@@ -49,7 +55,6 @@ const SocketContextComponent: FunctionComponent<ISocketContextProviderProps> = (
     socket.on("connect", () => {
       console.log("hi id: ", socket.id);
     });
-    socket?.emit("hello", `hi my socket id: ${socket.id}`);
   }, []);
 
   return (
