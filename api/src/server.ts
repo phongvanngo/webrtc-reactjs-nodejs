@@ -35,7 +35,7 @@ const io = new Server<
   SocketData
 >(server, {
   cors: {
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });

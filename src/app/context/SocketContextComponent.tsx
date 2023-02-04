@@ -4,19 +4,17 @@ import {
   useCallback,
   useEffect,
   useReducer,
-  useRef,
-  useState,
+  useRef
 } from "react";
 import { io, Socket } from "socket.io-client";
 import {
   ClientToServerEvents,
-  ServerToClientEvents,
+  ServerToClientEvents
 } from "../../types/socket.type";
-import { SIGNALING_BASEURL } from "../constants";
-import SocketContext, {
+import {
   initialContextState,
   SocketContextProvider,
-  SocketReducer,
+  SocketReducer
 } from "./SocketContext";
 
 export interface ISocketContextProviderProps extends PropsWithChildren {}
