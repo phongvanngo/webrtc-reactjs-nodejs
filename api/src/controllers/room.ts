@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { CreateRoomRequestDTO } from "../dto/request/CreateRoomRequestDTO";
 import { JoinRoomRequestDTO } from "../dto/request/JoinRoomRequestDTO";
-import { RequestJoinRoom, RoomModel } from "../model/RoomModel";
-import { RoomService } from "../services/RoomServiceImpl";
+import { RoomModel } from "../model/RoomModel";
+import { RoomService } from "../services/RoomService";
 
 export async function createRoomHandler(
   req: Request<{}, {}, CreateRoomRequestDTO>,

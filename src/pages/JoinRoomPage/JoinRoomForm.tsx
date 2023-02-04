@@ -1,17 +1,16 @@
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { roomAPI } from "../../app/api/roomAPI";
 import SocketContext from "../../app/context/SocketContext";
-import { CreateRoomRequestDTO, RequestJoinRoomDTO } from "../../types/request";
-import { useNavigate } from "react-router-dom";
-import { Room } from "../../models/Room";
-import { AxiosError } from "axios";
+import { User } from "../../models/User";
+import { RequestJoinRoomDTO } from "../../types/request";
 
 type Props = {};
 
 type FormData = {
   username: string;
-  roomId: string;
+  roomCode: number;
 };
 
 export default function JoinRoomForm({}: Props) {
@@ -25,15 +24,19 @@ export default function JoinRoomForm({}: Props) {
 
   const navigate = useNavigate();
 
+  const handleSaveUserInfo = (user: User) => {
+    dispatch({ type: "update_user", payload: user });
+  };
+
   const onSubmit = handleSubmit(async (data) => {
+    const myInfo: User = { username: data.username };
     const requestJoinRoomDTO: RequestJoinRoomDTO = {
-      user: {
-        username: data.username,
-      },
+      user: myInfo,
       room: {
-        roomId: data.roomId,
+        roomCode: data.roomCode,
       },
     };
+    handleSaveUserInfo(myInfo);
     try {
       const res = await roomAPI.joinRoom(requestJoinRoomDTO);
       navigate(`/${res.data.roomId}`);
@@ -47,7 +50,7 @@ export default function JoinRoomForm({}: Props) {
       <label>username</label>
       <input {...register("username")} />
       <label>room name</label>
-      <input {...register("roomId")} />
+      <input type="number" {...register("roomCode", { valueAsNumber: true })} />
       <button type="submit">Join</button>
     </form>
   );

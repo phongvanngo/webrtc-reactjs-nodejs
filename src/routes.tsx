@@ -10,7 +10,7 @@ export default function AppRoutes({}: Props) {
   return (
     <Routes>
       <Route path="/join" element={<JoinRoomPage />} />
-      <Route path="/:id" element={<CallingPage />} />
+      <Route path="/:roomId" element={<CallingPage />} />
       <Route path="/" element={<Homepage />} />
     </Routes>
   );

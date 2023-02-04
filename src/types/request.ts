@@ -8,5 +8,5 @@ export interface CreateRoomRequestDTO {
 
 export interface RequestJoinRoomDTO {
   user: User;
-  room: Pick<Room, "roomId">;
+  room: Pick<Room, "roomCode">;
 }

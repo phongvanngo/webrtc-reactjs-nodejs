@@ -3,6 +3,6 @@ export interface MemberModel {
   username: string;
   offer?: Object;
   answer?: Object;
-  isOwner: boolean;
+  isOwner?: boolean;
   roomId: string;
 }

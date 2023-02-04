@@ -54,6 +54,12 @@ const SocketContextComponent: FunctionComponent<ISocketContextProviderProps> = (
   const startListening = useCallback(() => {
     socket.on("connect", () => {
       console.log("hi id: ", socket.id);
+      socket.on("newMemberJoinRoom", (member, room) => {
+        console.log("new member: ", member, room);
+      });
+      socket.on("memberLeaveRoom", (member, room) => {
+        console.log("member left Room: ", member, room);
+      });
     });
   }, []);
 
