@@ -1,0 +1,53 @@
+on:
+  push:
+    branches: [ "main" ]
+    
+env:
+  version: ${{ github.sha }}
+  dockerhub_username: ${{ secrets.DOCKER_USERNAME }}
+  dockerhub_password: ${{ secrets.DOCKER_PASSWORD }}
+  base_url: ${{ secrets.REACT_APP_BASE_URL }}
+
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: 
+        echo hello;
+        docker build . --file Dockerfile --tag phongvanngo/kconnect-ui:latest --build-arg REACT_APP_BASE_URL=${{ secrets.REACT_APP_BASE_URL }};
+        docker tag phongvanngo/kconnect-ui:latest phongvanngo/kconnect-ui:$version;
+        
+    - name: Push Docker Image
+      run:
+        echo hello;
+        docker login --username=${dockerhub_username} --password=${dockerhub_password};
+        docker push phongvanngo/kconnect-ui:$version;
+        docker push phongvanngo/kconnect-ui:latest;
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        password: ${{ secrets.SERVER_PASSWORD }}
+        script: 
+          docker pull phongvanngo/kconnect-ui; 
+          docker stop kconnect-ui; 
+          docker rm kconnect-ui; 
+          docker run 
+            -d 
+            --name kconnect-ui  
+            -p 20000:80 
+            phongvanngo/kconnect-ui:latest;
+            docker image prune --filter="dangling=true"  -f;
