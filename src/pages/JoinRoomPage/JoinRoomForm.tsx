@@ -35,11 +35,15 @@ export default function JoinRoomForm({}: Props) {
       room: {
         roomCode: data.roomCode,
       },
+      agora: {
+        uid: 1,
+        role: "SUBCRIBER",
+      },
     };
     handleSaveUserInfo(myInfo);
     try {
       const res = await roomAPI.joinRoom(requestJoinRoomDTO);
-      navigate(`/${res.data.roomId}`);
+      navigate(`/${res.data.room.roomId}`);
     } catch (error: any) {
       alert(error.response.data);
     }

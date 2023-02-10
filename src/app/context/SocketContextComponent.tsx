@@ -4,17 +4,19 @@ import {
   useCallback,
   useEffect,
   useReducer,
-  useRef
+  useRef,
 } from "react";
 import { io, Socket } from "socket.io-client";
+import { OnNewMessageType } from "../../models/Message";
 import {
   ClientToServerEvents,
-  ServerToClientEvents
+  ServerToClientEvents,
 } from "../../types/socket.type";
+import { SIGNALING_BASEURL } from "../constants";
 import {
   initialContextState,
   SocketContextProvider,
-  SocketReducer
+  SocketReducer,
 } from "./SocketContext";
 
 export interface ISocketContextProviderProps extends PropsWithChildren {}
@@ -25,7 +27,7 @@ const SocketContextComponent: FunctionComponent<ISocketContextProviderProps> = (
   const { current: socket } = useRef<
     Socket<ServerToClientEvents, ClientToServerEvents>
   >(
-    io("http://localhost:8999/np", {
+    io(SIGNALING_BASEURL, {
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
       autoConnect: false,
@@ -57,6 +59,13 @@ const SocketContextComponent: FunctionComponent<ISocketContextProviderProps> = (
       });
       socket.on("memberLeaveRoom", (member, room) => {
         console.log("member left Room: ", member, room);
+      });
+      socket.on("newMessageToGroup", (mess: OnNewMessageType) => {
+        console.log("new message", mess);
+        SocketDispatch({
+          type: "new_message",
+          payload: mess,
+        });
       });
     });
   }, []);

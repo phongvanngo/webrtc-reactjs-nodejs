@@ -1,5 +1,6 @@
 import { createContext } from "react";
 import { Socket } from "socket.io-client";
+import { EmitMessageType, Message } from "../../models/Message";
 import { CreateRoomType, JoinRoomType } from "../../models/Room";
 import { User } from "../../models/User";
 import {
@@ -12,6 +13,8 @@ export interface ISocketContextState {
   roomId: string | null;
   user: User | null;
   offer: string | null;
+
+  messages: Message[];
 }
 
 export const initialContextState: ISocketContextState = {
@@ -19,6 +22,7 @@ export const initialContextState: ISocketContextState = {
   roomId: null,
   user: { username: "unknown" },
   offer: "unknown",
+  messages: [],
 };
 
 export type CreateRoomPayloadType = {
@@ -31,14 +35,18 @@ export type TSocketContextActions =
   | "hello"
   | "joinRoom"
   | "update_user"
-  | "update_offer";
+  | "update_offer"
+  | "send_message"
+  | "new_message";
 export type TSocketContextPayload =
   | Socket
   | string
   | null
   | User
   | CreateRoomPayloadType
-  | JoinRoomType;
+  | JoinRoomType
+  | EmitMessageType
+  | Message;
 
 export interface ISocketContextActions {
   type: TSocketContextActions;
@@ -68,6 +76,16 @@ export const SocketReducer = (
       return { ...state, user: action.payload as User };
     case "update_offer":
       return { ...state, offer: action.payload as string };
+    case "new_message":
+      if (!state.socket) return state;
+      const mess = action.payload as Message;
+      return { ...state, messages: [...state.messages, mess] };
+    case "send_message":
+      if (state.socket) {
+        const mess = action.payload as EmitMessageType;
+        state.socket.emit("message", mess);
+      }
+      return state;
     default:
       return state;
   }

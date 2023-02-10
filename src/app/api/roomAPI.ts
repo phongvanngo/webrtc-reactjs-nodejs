@@ -9,6 +9,6 @@ export const roomAPI = {
   },
   joinRoom: (request: RequestJoinRoomDTO) => {
     const url = "/room/join-room";
-    return axiosClient.post<Room>(url, request);
+    return axiosClient.post<any>(url, request);
   },
 };

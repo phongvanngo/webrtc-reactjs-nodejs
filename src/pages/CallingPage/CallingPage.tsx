@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import SocketContext, { SocketReducer } from "../../app/context/SocketContext";
 import { JoinRoomType } from "../../models/Room";
+import ChatPage from "../ChatPage";
 
 type Props = {};
 
@@ -29,5 +30,9 @@ export default function CallingPage({}: Props) {
 
   if (!socket) return <div>waiting for socket connection</div>;
 
-  return <div>CallingPage</div>;
+  return (
+    <div>
+      <ChatPage />
+    </div>
+  );
 }

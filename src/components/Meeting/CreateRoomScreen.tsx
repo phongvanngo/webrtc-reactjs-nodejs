@@ -2,7 +2,7 @@ import React, { useContext, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { roomAPI } from "../../app/api/roomAPI";
 import SocketContext from "../../app/context/SocketContext";
-import { CreateRoomType } from "../../models/Room";
+import { CreateRoomType, Room } from "../../models/Room";
 import { User } from "../../models/User";
 import { CreateRoomRequestDTO } from "../../types/request";
 
@@ -33,10 +33,14 @@ export default function CreateRoomScreen({}: Props) {
         roomName: data.roomName,
         description: data.description,
       },
+      agora: {
+        uid: 1,
+        role: "PUBLISHER",
+      },
     };
     try {
       const res = await roomAPI.createRoom(createRoomRequestDTO);
-      console.log("create Room: ",res);
+      console.log("create Room: ", res);
     } catch (error) {
       console.log(error);
     }

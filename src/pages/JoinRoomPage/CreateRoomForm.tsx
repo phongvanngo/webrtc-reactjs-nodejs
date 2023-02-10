@@ -41,14 +41,18 @@ export default function CreateRoomForm({}: Props) {
         roomName: data.roomName,
         description: data.description,
       },
+      agora: {
+        uid: 23,
+        role: "PUBLISHER",
+      },
     };
     handleSaveUserInfo(myData);
     try {
-      const res: AxiosResponse<Room> = await roomAPI.createRoom(
+      const res: AxiosResponse<any> = await roomAPI.createRoom(
         createRoomRequestDTO
       );
       console.log("create Room: ", res);
-      navigate(`/${res.data.roomId}`);
+      navigate(`/${res.data.room.roomId}`);
     } catch (error) {
       console.log(error);
     }
